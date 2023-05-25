@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState } from 'react';
 import { ImSearch } from 'react-icons/im';
 import {
   Header,
@@ -14,56 +14,48 @@ import {
 } from './Searchbar.styled';
 import pixelLogo from '../../images/pixel.png';
 
-export class Searchbar extends Component {
-  state = {
-    input: '',
+export default function Searchbar({ onSubmit }) {
+  const [input, setInput] = useState('');
+
+  const searchInputHandler = e => {
+    setInput(e.target.value);
   };
 
-  searchInputHandler = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.input.trim());
-    this.setState({
-      input: '',
-    });
+    onSubmit(input.trim());
+    setInput('');
   };
 
-  render() {
-    const { input } = this.state;
-    return (
-      <>
-        <Header>
-          <LogoWrapper>
-            <LogoLink href="">
-              <Logo src={pixelLogo} alt="pixel logo" />
-              <LogoText>
-                <LogoDot>.</LogoDot>picsEl
-              </LogoText>
-            </LogoLink>
-          </LogoWrapper>
+  return (
+    <>
+      <Header>
+        <LogoWrapper>
+          <LogoLink href="">
+            <Logo src={pixelLogo} alt="pixel logo" />
+            <LogoText>
+              <LogoDot>.</LogoDot>picsEl
+            </LogoText>
+          </LogoLink>
+        </LogoWrapper>
 
-          <SearchForm onSubmit={this.handleSubmit}>
-            <SearchFormButton type="submit">
-              <ImSearch size={24} color="red" />
-            </SearchFormButton>
+        <SearchForm onSubmit={handleSubmit}>
+          <SearchFormButton type="submit">
+            <ImSearch size={24} color="red" />
+          </SearchFormButton>
 
-            <SearchForInput
-              onChange={this.searchInputHandler}
-              type="text"
-              name="input"
-              value={input}
-              autoComplete="off"
-              placeholder="Search images and photos"
-            />
-          </SearchForm>
-        </Header>
-      </>
-    );
-  }
+          <SearchForInput
+            onChange={searchInputHandler}
+            type="text"
+            name="input"
+            value={input}
+            autoComplete="off"
+            placeholder="Search images and photos"
+          />
+        </SearchForm>
+      </Header>
+    </>
+  );
 }
 
 Searchbar.propTypes = {

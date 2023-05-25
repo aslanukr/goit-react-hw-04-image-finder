@@ -1,33 +1,31 @@
-import { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getImages } from 'services/api';
-import { Searchbar } from './Searchbar/Searchbar';
+import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
+import { useEffect, useState } from 'react';
 
-export class App extends Component {
-  state = {
-    query: '',
-    images: [],
-    isLoading: false,
-    error: '',
-    page: 1,
-    totalHits: null,
-  };
+export default function App() {
+  const [query, setQuery] = useState('');
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalHits, setTotalHits] = useState(null);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { query, page, totalHits, images } = this.state;
-
+  useEffect(() => {
     if (query === '') {
-      toast.warn('Please enter your search request');
+      if (!isFirstRender) {
+        toast.warn('Please enter your search request');
+      }
       return;
     }
 
-    if (prevState.query !== query || prevState.page !== page) {
+    const fetchImages = async () => {
       try {
-        this.setState({ isLoading: true });
+        setIsLoading(true);
         const { hits, totalHits } = await getImages(query, page);
         if (hits.length === 0) {
           toast.error(
@@ -39,47 +37,58 @@ export class App extends Component {
           toast.success(`Hooray! We found ${totalHits} images!`);
         }
 
-        const images = hits.map(({ id, largeImageURL, webformatURL, tags }) => {
-          return { id, largeImageURL, webformatURL, tags };
-        });
+        const pictures = hits.map(
+          ({ id, largeImageURL, webformatURL, tags }) => {
+            return { id, largeImageURL, webformatURL, tags };
+          }
+        );
 
-        return this.setState(prevState => ({
-          images: [...prevState.images, ...images],
-          totalHits: totalHits,
-        }));
+        setImages(prev => [...prev, ...pictures]);
+        setTotalHits(totalHits);
       } catch (error) {
-        this.setState({ error: error.message });
+        toast.error(`${error.message}`);
         console.log(error.message);
       } finally {
-        this.setState({ isLoading: false });
+        setIsLoading(false);
       }
-    }
+    };
 
+    fetchImages();
+    setIsFirstRender(false);
+  }, [query, page, isFirstRender]);
+
+  useEffect(() => {
     if (totalHits !== null && totalHits <= images.length) {
       toast.info(`We're sorry, but you've reached the end of search results.`);
     }
-  }
+  }, [totalHits, images]);
 
-  handleSearch = query => {
-    this.setState({ query, images: [], page: 1 });
+  const handleSearch = query => {
+    setIsFirstRender(false);
+    setQuery(query);
+    setImages([]);
+    setPage(1);
+    if (query === '') {
+      if (!isFirstRender) {
+        toast.warn('Please enter your search request');
+      }
+      return;
+    }
   };
 
-  handleLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const handleLoadMore = () => {
+    setPage(prev => prev + 1);
   };
 
-  render() {
-    const { images, isLoading, page, totalHits } = this.state;
-    const showButton = images.length > 0 && totalHits > page * 12 && !isLoading;
+  const showButton = images.length > 0 && totalHits > page * 12 && !isLoading;
 
-    return (
-      <>
-        <Searchbar onSubmit={this.handleSearch} />
-        {images?.length > 0 && <ImageGallery images={images} />}
-        {showButton && <Button onClick={this.handleLoadMore} />}
-        {isLoading && <Loader />}
-        <ToastContainer autoClose={1000} />
-      </>
-    );
-  }
+  return (
+    <>
+      <Searchbar onSubmit={handleSearch} />
+      {images?.length > 0 && <ImageGallery images={images} />}
+      {showButton && <Button onClick={handleLoadMore} />}
+      {isLoading && <Loader />}
+      <ToastContainer autoClose={1500} />
+    </>
+  );
 }
