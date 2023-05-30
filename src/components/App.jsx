@@ -17,9 +17,9 @@ export default function App() {
 
   useEffect(() => {
     if (query === '') {
-      if (!isFirstRender) {
-        toast.warn('Please enter your search request');
-      }
+      // if (!isFirstRender) {
+      //   toast.warn('Please enter your search request');
+      // }
       return;
     }
 
@@ -68,6 +68,9 @@ export default function App() {
     setQuery(query);
     setImages([]);
     setPage(1);
+    if (query === '') {
+      toast.warn('Please enter your search request');
+    }
   };
 
   const handleLoadMore = () => {
