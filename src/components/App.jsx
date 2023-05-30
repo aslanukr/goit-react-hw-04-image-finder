@@ -13,15 +13,9 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
-  const [isFirstRender, setIsFirstRender] = useState(true);
 
   useEffect(() => {
-    if (query === '') {
-      // if (!isFirstRender) {
-      //   toast.warn('Please enter your search request');
-      // }
-      return;
-    }
+    if (!query) return;
 
     const fetchImages = async () => {
       try {
@@ -54,8 +48,7 @@ export default function App() {
     };
 
     fetchImages();
-    setIsFirstRender(false);
-  }, [query, page, isFirstRender]);
+  }, [query, page]);
 
   useEffect(() => {
     if (totalHits !== null && totalHits <= images.length) {
@@ -64,7 +57,6 @@ export default function App() {
   }, [totalHits, images]);
 
   const handleSearch = query => {
-    setIsFirstRender(false);
     setQuery(query);
     setImages([]);
     setPage(1);
