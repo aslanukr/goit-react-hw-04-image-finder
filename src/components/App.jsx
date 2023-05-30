@@ -68,12 +68,6 @@ export default function App() {
     setQuery(query);
     setImages([]);
     setPage(1);
-    if (query === '') {
-      if (!isFirstRender) {
-        toast.warn('Please enter your search request');
-      }
-      return;
-    }
   };
 
   const handleLoadMore = () => {
