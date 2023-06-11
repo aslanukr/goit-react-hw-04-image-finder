@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/goit-react-hw-04-image-finder/static/css/main.37d2e716.css",
-    "main.js": "/goit-react-hw-04-image-finder/static/js/main.032d66de.js",
-    "static/media/background.jpg": "/goit-react-hw-04-image-finder/static/media/background.a19913691fa322f3a3c8.jpg",
-    "static/media/pixel.png": "/goit-react-hw-04-image-finder/static/media/pixel.8cb31288babb6b7bfbd5.png",
-    "index.html": "/goit-react-hw-04-image-finder/index.html",
-    "main.37d2e716.css.map": "/goit-react-hw-04-image-finder/static/css/main.37d2e716.css.map",
-    "main.032d66de.js.map": "/goit-react-hw-04-image-finder/static/js/main.032d66de.js.map"
+    "main.css": "/picsel-react/static/css/main.09044b81.css",
+    "main.js": "/picsel-react/static/js/main.17258a27.js",
+    "static/media/background.jpg": "/picsel-react/static/media/background.a19913691fa322f3a3c8.jpg",
+    "static/media/pixel.png": "/picsel-react/static/media/pixel.8cb31288babb6b7bfbd5.png",
+    "index.html": "/picsel-react/index.html",
+    "main.09044b81.css.map": "/picsel-react/static/css/main.09044b81.css.map",
+    "main.17258a27.js.map": "/picsel-react/static/js/main.17258a27.js.map"
   },
   "entrypoints": [
-    "static/css/main.37d2e716.css",
-    "static/js/main.032d66de.js"
+    "static/css/main.09044b81.css",
+    "static/js/main.17258a27.js"
   ]
 }
